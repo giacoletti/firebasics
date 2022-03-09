@@ -53,6 +53,7 @@ auth.onAuthStateChanged((user) => {
 
     unsubscribe = thingsRef
       .where("uid", "==", user.uid)
+      .orderBy("createdAt")
       .onSnapshot((querySnapshot) => {
         //onSnapshot triggers at every data change in the db
         const items = querySnapshot.docs.map((doc) => {
@@ -60,5 +61,8 @@ auth.onAuthStateChanged((user) => {
         });
         thingsList.innerHTML = items.join("");
       });
+  } else {
+    //close db connection when user signed out
+    unsubscribe && unsubscribe();
   }
 });
