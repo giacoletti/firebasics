@@ -50,5 +50,15 @@ auth.onAuthStateChanged((user) => {
         createdAt: serverTimestamp()
       });
     };
+
+    unsubscribe = thingsRef
+      .where("uid", "==", user.uid)
+      .onSnapshot((querySnapshot) => {
+        //onSnapshot triggers at every data change in the db
+        const items = querySnapshot.docs.map((doc) => {
+          return `<li>${doc.data().name}</li>`;
+        });
+        thingsList.innerHTML = items.join("");
+      });
   }
 });
