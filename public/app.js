@@ -27,3 +27,28 @@ auth.onAuthStateChanged((user) => {
     userDetails.innerHTML = "";
   }
 });
+
+// Firestore
+
+const db = firebase.firestore();
+
+const createThing = document.getElementById("createThing");
+const thingsList = document.getElementById("thingsList");
+
+let thingsRef, unsubscribe;
+
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    thingsRef = db.collection("things");
+
+    createThing.onclick = () => {
+      const { serverTimestamp } = firebase.firestore.FieldValue;
+
+      thingsRef.add({
+        uid: user.uid,
+        name: faker.commerce.productName(),
+        createdAt: serverTimestamp()
+      });
+    };
+  }
+});
